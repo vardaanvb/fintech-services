@@ -1,4 +1,4 @@
-package com.fin.endpoints;
+package com.fintech.endpoints;
 
 public class Endpoints {
 	

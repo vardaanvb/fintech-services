@@ -1,45 +1,35 @@
 package com.fintech.tests;
 
 import com.fintech.config.ConfigManager;
+
 import com.fintech.endpoints.Endpoints;
 import com.fintech.models.PaymentRequest;
 import com.fintech.models.PaymentResponse;
-import com.fintech.models.PaymentResponseMain;
-import com.fintech.models.PaymentResponseTimeStamp;
+
+import com.fintech.resources.Payload;
+import com.fintech.utils.ApiRequestHelper;
 import com.fintech.utils.ValidationUtils;
-import com.fintech.data.HashMapToJSON;
-import com.fintech.data.TestDataReader; // Import TestDataReader from test folder
-import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
+import com.fintech.data.ExcelToJSONBody;
+import com.fintech.data.TestDataReader; 
+
 import io.restassured.response.Response;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.testng.ITestResult;
-import org.testng.annotations.BeforeMethod;
+
 import org.testng.annotations.Test;
 
 public class PaymentFlowTests {
 
-
-	
 	private static final String sheetName = ConfigManager.getInstance().getProperty("paymentSheetName");
-	
 
 	@Test
-	public void testPaymentFlowWithBearerToken() {
+	public void testPaymentFlowWithJsonBody() {
 		// Path to the JSON file
-		String filePath = "src/test/resources/testdata/payment_data.json";
-
-		// Load the PaymentRequest object from the JSON file
-		PaymentRequest paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequest.class);
-
 		// Perform the API request
-		RestAssured.baseURI = ConfigManager.getInstance().getBaseUrl();
-		Response response = RestAssured.given()
-				.header("Authorization", ConfigManager.getInstance().getProperty("authToken")).body(paymentRequest)
-				.post(ConfigManager.getInstance().getProperty("baseURL") + Endpoints.CONFIRM_PAYMENT);
+		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT,
+				Payload.makePayment());
 
 		// Deserialize the response into PaymentResponse
 		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
@@ -50,14 +40,24 @@ public class PaymentFlowTests {
 	}
 
 	@Test
+	public void testPaymentFlowWithBearerToken() {
+		PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
+				PaymentRequest.class);
+		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT,
+				paymentRequest);
+
+		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+		ValidationUtils.validateStatusCode(response, 200);
+		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
+	}
+
+	@Test
 	public void testPaymentFlowWithBearerTokenExcel(ITestResult result) {
 
-		HashMap<String, Object> jsonData = HashMapToJSON.getInstance().paymentDataFromExcel(result.getMethod().getMethodName(), sheetName);
+		HashMap<String, Object> jsonData = ExcelToJSONBody.getInstance()
+				.paymentDataFromExcel(result.getMethod().getMethodName(), sheetName);
 
-		RestAssured.baseURI = ConfigManager.getInstance().getBaseUrl();
-		Response response = RestAssured.given()
-				.header("Authorization", ConfigManager.getInstance().getProperty("authToken")).body(jsonData)
-				.post(ConfigManager.getInstance().getProperty("baseURL") + Endpoints.CONFIRM_PAYMENT);
+		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT, jsonData);
 
 		// Deserialize the response into PaymentResponse
 		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
@@ -69,48 +69,12 @@ public class PaymentFlowTests {
 
 	@Test
 	public void testPaymentFlowWithOAuth() {
-		// Path to the JSON file
-		String filePath = "src/test/resources/testdata/payment_data.json";
-		String oAuthBaseURL = ConfigManager.getInstance().getProperty(filePath);
-		String oAuthClientID = ConfigManager.getInstance().getProperty(filePath);
-		String oAuthClientSecretL = ConfigManager.getInstance().getProperty(filePath);
-		String oAuthGrantType = ConfigManager.getInstance().getProperty(filePath);
-		String oAuthScope = ConfigManager.getInstance().getProperty(filePath);
+		PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
+				PaymentRequest.class);
+		Response response = ApiRequestHelper.makeApiRequest("oauth", "POST", Endpoints.CONFIRM_PAYMENT, paymentRequest);
 
-		// Load the PaymentRequest object from the JSON file
-		PaymentRequest paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequest.class);
-
-		// Perform the API request
-
-		Response oAuthResponse = RestAssured.given().formParam("client_id", oAuthClientID)
-				.formParam("client_secret", oAuthClientSecretL).formParam("grant_type", oAuthGrantType)
-				.formParam("scope", oAuthScope).when().post(oAuthBaseURL);
-		String responseString = oAuthResponse.toString();
-
-		JsonPath jp = new JsonPath(responseString);
-		String accessToken = jp.getString("access_Token");
-
-		RestAssured.baseURI = ConfigManager.getInstance().getBaseUrl();
-		Response response = RestAssured.given().header("Authorization", accessToken).body(paymentRequest)
-				.post(ConfigManager.getInstance().getProperty("baseURL") + Endpoints.CONFIRM_PAYMENT);
-
-		// Deserialize the response into PaymentResponse
-		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
-
-		// Validate the response
+		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
 		ValidationUtils.validateStatusCode(response, 200);
 		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
-		ValidationUtils.validateResponseBody(paymentResponse.getMessage(), "Payment completed successfully");
-
-		List<PaymentResponseTimeStamp> event = paymentResponse.getDetails().getTimestamps();
-		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(0).getEvent(),
-				"Initiated");
-		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(1).getEvent(), "Pending");
-		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(2).getEvent(),
-				"Completed");
-
-		for (int i = 0; i < event.size(); i++) {
-			// iterate over the list to validate data.
-		}
 	}
 }

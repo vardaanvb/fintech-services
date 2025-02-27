@@ -1,4 +1,4 @@
-package com.fintech.data;
+package com.fintech.utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

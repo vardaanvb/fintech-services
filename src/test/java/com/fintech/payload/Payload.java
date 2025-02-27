@@ -1,4 +1,4 @@
-package com.fintech.resources;
+package com.fintech.payload;
 
 public class Payload {
 	

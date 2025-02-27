@@ -16,7 +16,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
-public class WireMockTestNG {
+public class WireMockTest {
     
     private WireMockServer wireMockServer;
     protected static final int WIREMOCK_PORT = 8081;

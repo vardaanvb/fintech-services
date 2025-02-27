@@ -2,24 +2,24 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-02-27T21:34:57 IST" name="Default suite" finished-at="2025-02-27T21:34:59 IST" duration-ms="1760">
+  <suite started-at="2025-02-28T00:36:50 IST" name="Default suite" finished-at="2025-02-28T00:36:52 IST" duration-ms="1724">
     <groups>
     </groups>
-    <test started-at="2025-02-27T21:34:57 IST" name="Default test" finished-at="2025-02-27T21:34:59 IST" duration-ms="1760">
-      <class name="com.fintech.mock.WireMockTestNG">
-        <test-method is-config="true" signature="setUp()[pri:0, instance:com.fintech.mock.WireMockTestNG@5119fb47]" started-at="2025-02-27T21:34:58 IST" name="setUp" finished-at="2025-02-27T21:34:58 IST" duration-ms="934" status="PASS">
+    <test started-at="2025-02-28T00:36:50 IST" name="Default test" finished-at="2025-02-28T00:36:52 IST" duration-ms="1724">
+      <class name="com.fintech.tests.WireMockTest2">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.fintech.tests.WireMockTest2@3835c46]" started-at="2025-02-28T00:36:50 IST" name="setUp" finished-at="2025-02-28T00:36:51 IST" duration-ms="932" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testWireMockStub()[pri:0, instance:com.fintech.mock.WireMockTestNG@5119fb47]" started-at="2025-02-27T21:34:58 IST" name="testWireMockStub" finished-at="2025-02-27T21:34:59 IST" duration-ms="797" status="PASS">
+        <test-method signature="testWireMockStub()[pri:0, instance:com.fintech.tests.WireMockTest2@3835c46]" started-at="2025-02-28T00:36:51 IST" name="testWireMockStub" finished-at="2025-02-28T00:36:52 IST" duration-ms="764" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testWireMockStub -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.fintech.mock.WireMockTestNG@5119fb47]" started-at="2025-02-27T21:34:59 IST" name="tearDown" finished-at="2025-02-27T21:34:59 IST" duration-ms="7" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.fintech.tests.WireMockTest2@3835c46]" started-at="2025-02-28T00:36:52 IST" name="tearDown" finished-at="2025-02-28T00:36:52 IST" duration-ms="6" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- com.fintech.mock.WireMockTestNG -->
+      </class> <!-- com.fintech.tests.WireMockTest2 -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

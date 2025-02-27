@@ -11,38 +11,48 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import com.fintech.config.ConfigManager;
-import com.fintech.helper.BaseTestHelper;
-import com.fintech.mock.WireMockHelper;
+import com.fintech.tests.WireMockTest2;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 public class BaseTest {
-	
-	private static final String BASE_URL = ConfigManager.getInstance().getBaseUrl();
-	private static final String GOVT_AUTH_URL = ConfigManager.getInstance().getProperty("govtAuthURL");
-	
+
+	protected static final String BASE_URL = ConfigManager.getInstance().getBaseUrl();
+
 	protected static final String DIGILOCKER_URL = ConfigManager.getInstance().getProperty("digiLockerBaseURL");
-	public String govtAuthToken;
 
-    protected WireMockServer wireMockServer;
-    protected static final int WIREMOCK_PORT = 8081;
-    WireMockHelper helper = new WireMockHelper();
+	private static final String GOVT_PRE_AUTH_URL = ConfigManager.getInstance().getProperty("govtAuthURL");
+	private static final String INT_PRE_AUTH_URL = ConfigManager.getInstance().getProperty("intAuthURL");
 
-    @BeforeMethod
-    public void setUp() {
-    	
-    	govtAuthToken = BaseTestHelper.getOAuthToken(GOVT_AUTH_URL);
-    }
+	public String govtPreAuthToken;
+	public String intPreAuthToken;
+	protected WireMockServer wireMockServer;
+	protected static final int WIREMOCK_PORT = 8081;
+	BaseTestHelper bth = new BaseTestHelper();
+	@BeforeMethod
+	public void setUp() {
+		try {
+			wireMockServer = new WireMockServer(WIREMOCK_PORT);
+			wireMockServer.start();
+			configureFor("localhost", WIREMOCK_PORT);
+			bth.createTransactionsStub();
+			System.out.println("WireMock server started successfully.");
+		} catch (Exception e) {
+			System.err.println("Error starting WireMock server: " + e.getMessage());
+			throw new RuntimeException("Failed to start WireMock server", e);
+		}
+	//	govtPreAuthToken = BaseTestHelper.getGovtPreOAuthToken(GOVT_PRE_AUTH_URL);
+	//	intPreAuthToken = BaseTestHelper.getInternalPreOAuthToken(INT_PRE_AUTH_URL);
+	}
 
-
-    @AfterMethod
-    public void tearDown() {
-        if (wireMockServer != null) {
-            try {
-                wireMockServer.stop();
-                System.out.println("WireMock server stopped successfully.");
-            } catch (Exception e) {
-                System.err.println("Error stopping WireMock server: " + e.getMessage());
-            }
-        }
-    }
+	@AfterMethod
+	public void tearDown() {
+		if (wireMockServer != null) {
+			try {
+				wireMockServer.stop();
+				System.out.println("WireMock server stopped successfully.");
+			} catch (Exception e) {
+				System.err.println("Error stopping WireMock server: " + e.getMessage());
+			}
+		}
+	}
 }

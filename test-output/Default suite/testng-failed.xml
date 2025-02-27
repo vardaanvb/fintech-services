@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.fintech.mock.WireMockTestNG">
+      <class name="com.fintech.mock.WireMockTest2">
         <methods>
-          <include name="tearDown"/>
           <include name="testWireMockStub"/>
           <include name="setUp"/>
+          <include name="tearDown"/>
         </methods>
-      </class> <!-- com.fintech.mock.WireMockTestNG -->
+      </class> <!-- com.fintech.mock.WireMockTest2 -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

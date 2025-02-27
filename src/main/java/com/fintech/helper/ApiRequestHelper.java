@@ -17,14 +17,14 @@ public class ApiRequestHelper {
 
 	
 
-	public static Response makeApiRequest(String authType, String httpMethod, String endpoint, Object requestBody) {
+	public static Response makeApiRequest(String baseURL, String authType, String httpMethod, String endpoint, Object requestBody) {
 		// Get authentication provider dynamically
 		AuthProvider authProvider = AuthFactory.getAuthProvider(authType);
 		String authToken = authProvider.getAuthToken();
 		
 		
 		// Create the request specification
-		RequestSpecification requestSpec = RestAssured.given().header("Authorization", authToken).baseUri(BASE_URL)
+		RequestSpecification requestSpec = RestAssured.given().header("Authorization", authToken).baseUri(baseURL)
 				.when();
 
 		// Handle different HTTP methods dynamically
@@ -44,7 +44,7 @@ public class ApiRequestHelper {
 
 
 	
-	public static Response makePreAuthKYCRequest(String authToken, String thirdPartyBaseUrl, String endpoint, String queryParams) {
+	public static Response makeKYCRequest(String authToken, String thirdPartyBaseUrl, String endpoint, String queryParams) {
 
 		String fullUrl = thirdPartyBaseUrl + endpoint + "?" + queryParams;
 

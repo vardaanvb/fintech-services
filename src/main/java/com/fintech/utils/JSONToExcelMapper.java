@@ -1,16 +1,17 @@
-package com.fintech.config;
+package com.fintech.utils;
 
 public class JSONToExcelMapper {
 
     // Enum for column mappings
-    public enum Payments {
+    public enum FundsTransfer {
         AMOUNT("amount"),
         CURRENCY("currency"),
-        PAYMENT_METHOD("paymentMethod");
+        FROM_ACCOUNT("FromAccount"), 
+        TO_ACCOUNT("ToAccount");
 
         private final String jsonKey;
 
-        Payments(String jsonKey) {
+        FundsTransfer(String jsonKey) {
             this.jsonKey = jsonKey;
         }
 
@@ -19,5 +20,5 @@ public class JSONToExcelMapper {
         }
     }
 
-  
+    
 }

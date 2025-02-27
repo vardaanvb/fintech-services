@@ -3,11 +3,13 @@
 <suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Test(failed)">
     <classes>
-      <class name="com.fintech.mock.CreateMapping">
+      <class name="com.fintech.mock.WireMockTest2">
         <methods>
-          <include name="verifyStub"/>
+          <include name="testWireMockStub"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
         </methods>
-      </class> <!-- com.fintech.mock.CreateMapping -->
+      </class> <!-- com.fintech.mock.WireMockTest2 -->
     </classes>
   </test> <!-- Test(failed) -->
 </suite> <!-- Failed suite [Suite] -->

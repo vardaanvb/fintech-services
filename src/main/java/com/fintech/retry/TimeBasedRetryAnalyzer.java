@@ -1,4 +1,4 @@
-package com.fintech.helper;
+package com.fintech.retry;
 
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;

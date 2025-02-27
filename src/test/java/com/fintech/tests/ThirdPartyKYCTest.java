@@ -2,8 +2,8 @@ package com.fintech.tests;
 
 import com.fintech.endpoints.ApplicationEndpoints;
 import com.fintech.endpoints.ThirdPartyEndPoints;
-import com.fintech.models.PaymentRequest;
-import com.fintech.models.PaymentResponse;
+import com.fintech.models.PaymentRequestMain;
+import com.fintech.models.PaymentResponseMain;
 
 import com.fintech.utils.ApiRequestHelper;
 import com.fintech.utils.ValidationUtils;
@@ -33,10 +33,10 @@ public class ThirdPartyKYCTest {
         String kycStatus = kycResponse.jsonPath().getString("status");  // assuming response has status field
         if ("completed".equalsIgnoreCase(kycStatus)) {
       
-            PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json", PaymentRequest.class);
+            PaymentRequestMain paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json", PaymentRequestMain.class);
             Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
-            PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+            PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
             ValidationUtils.validateStatusCode(response, 200);
             ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
         } else {

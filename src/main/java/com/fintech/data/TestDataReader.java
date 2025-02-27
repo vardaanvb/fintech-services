@@ -16,10 +16,4 @@ public class TestDataReader {
             return null;
         }
     }
-
-    // Method to read Excel data (already implemented)
-    public static Object[][] readExcelData(String filePath, String sheetName) {
-        // Implement Excel reading logic using Apache POI
-        return new Object[][]{{"data1", "data2"}, {"data3", "data4"}};
-    }
 }

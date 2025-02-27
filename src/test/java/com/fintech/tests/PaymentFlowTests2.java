@@ -1,8 +1,8 @@
 package com.fintech.tests;
 
 import com.fintech.endpoints.ApplicationEndpoints;
-import com.fintech.models.PaymentRequest;
-import com.fintech.models.PaymentResponse;
+import com.fintech.models.PaymentRequestMain;
+import com.fintech.models.PaymentResponseMain;
 import com.fintech.models.PaymentResponseMain;
 import com.fintech.models.PaymentResponseTimeStamp;
 import com.fintech.resources.Payload;
@@ -27,10 +27,10 @@ public class PaymentFlowTests2 {
      */
     @Test
     public void testPaymentFlowWithJsonBody() {
-        PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json", PaymentRequest.class);
+        PaymentRequestMain paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json", PaymentRequestMain.class);
         Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, Payload.makePayment());
 
-        PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+        PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
         ValidationUtils.validateStatusCode(response, 200);
         ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
     }
@@ -41,11 +41,11 @@ public class PaymentFlowTests2 {
     @Test
     public void testPaymentFlowWithBearerToken() {
         String filePath = "src/test/resources/testdata/payment_data.json";
-        PaymentRequest paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequest.class);
+        PaymentRequestMain paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequestMain.class);
 
         Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
-        PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+        PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
         ValidationUtils.validateStatusCode(response, 200);
         ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
     }
@@ -59,7 +59,7 @@ public class PaymentFlowTests2 {
 
         Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, jsonData);
 
-        PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+        PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
         ValidationUtils.validateStatusCode(response, 200);
         ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
     }
@@ -70,7 +70,7 @@ public class PaymentFlowTests2 {
     @Test
     public void testPaymentFlowWithOAuth() {
         String filePath = "src/test/resources/testdata/payment_data.json";
-        PaymentRequest paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequest.class);
+        PaymentRequestMain paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequestMain.class);
 
         // Fetch OAuth token dynamically
         String oAuthBaseURL = ConfigManager.getInstance().getProperty("OAuthBaseURL");

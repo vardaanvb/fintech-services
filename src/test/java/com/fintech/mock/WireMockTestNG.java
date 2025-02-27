@@ -19,59 +19,81 @@ import io.restassured.response.Response;
 public class WireMockTestNG {
     
     private WireMockServer wireMockServer;
+    protected static final int WIREMOCK_PORT = 8081;
 
     @BeforeMethod
     public void setUp() {
-        // Start WireMock server on port 8081
-        wireMockServer = new WireMockServer(8081);
-        wireMockServer.start();
-        configureFor("localhost", 8081);
-        createTransactionsStub();
+        try {
+            // Start WireMock server on port 8081
+            wireMockServer = new WireMockServer(WIREMOCK_PORT);
+            wireMockServer.start();
+            configureFor("localhost", WIREMOCK_PORT);
+            createTransactionsStub();
+            System.out.println("WireMock server started successfully.");
+        } catch (Exception e) {
+            System.err.println("Error starting WireMock server: " + e.getMessage());
+            throw new RuntimeException("Failed to start WireMock server", e);
+        }
     }
 
-
-    
     public void createTransactionsStub() {
-        stubFor(get(urlEqualTo("/v1/transactions"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withBody(readFileAsString("Resources/__files/transactions.json"))  // ✅ Load JSON manually
-                .withHeader("Content-Type", "application/json")
-            ));
+        try {
+            String responseBody = readFileAsString("Resources/__files/transactions.json");
+
+            stubFor(get(urlEqualTo("/v1/transactions/1"))
+                .willReturn(aResponse()
+                    .withStatus(200)
+                    .withBody(responseBody) 
+                    .withHeader("Content-Type", "application/json")
+                ));
+            System.out.println("Stub created successfully.");
+        } catch (Exception e) {
+            System.err.println("Error creating WireMock stub: " + e.getMessage());
+            throw new RuntimeException("Failed to create stub", e);
+        }
     }
 
-    // Helper method to read file contents
+    // Helper method to read file contents with error handling
     private String readFileAsString(String filePath) {
         try {
             return new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException("Error reading file: " + filePath, e);
+            System.err.println("Error reading file: " + filePath + " - " + e.getMessage());
+            throw new RuntimeException("Failed to read file: " + filePath, e);
         }
     }
 
-
     @Test
     public void testWireMockStub() {
-        RestAssured.baseURI = "http://localhost:8081";
+        RestAssured.baseURI = "http://localhost:" + WIREMOCK_PORT;
 
-        Response response = RestAssured.given().log().all()
+        try {
+            Response response = RestAssured.given().log().all()
                 .when()
-                .get("/v1/transactions");
+                .get("/v1/transactions/1");
 
-        int statusCode = response.statusCode();
-        System.out.println("Response Code: " + statusCode);
-        String contentType = response.getContentType();
-        System.out.println("Content-Type: " + contentType);
-        response.prettyPrint();
+            int statusCode = response.statusCode();
+            System.out.println("Response Code: " + statusCode);
+            String contentType = response.getContentType();
+            System.out.println("Content-Type: " + contentType);
+            response.prettyPrint();
 
-        // Assertion (optional)
-        assert statusCode == 200 : "Expected 200 but got " + statusCode;
+            assert statusCode == 200 : "Expected 200 but got " + statusCode;
+        } catch (Exception e) {
+            System.err.println("Error in API request: " + e.getMessage());
+            throw new RuntimeException("API request failed", e);
+        }
     }
 
     @AfterMethod
     public void tearDown() {
         if (wireMockServer != null) {
-            wireMockServer.stop();
+            try {
+                wireMockServer.stop();
+                System.out.println("WireMock server stopped successfully.");
+            } catch (Exception e) {
+                System.err.println("Error stopping WireMock server: " + e.getMessage());
+            }
         }
     }
 }

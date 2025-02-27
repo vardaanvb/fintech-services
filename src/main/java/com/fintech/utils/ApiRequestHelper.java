@@ -12,12 +12,26 @@ import io.restassured.specification.RequestSpecification;
 public class ApiRequestHelper {
 
 	private static final String BASE_URL = ConfigManager.getInstance().getBaseUrl();
+	private static final String GOVT_AUTH_URL = "https://sample-govt-api.com/oauth/token";
+	private static final String DIGILOCKER_URL = "https://digilocker.gov/api/checkUser";
+
+	public static String getOAuthToken() {
+        Response response = RestAssured.given()
+                .contentType("application/json")
+                .body("{\"client_id\": \"your_client_id\", \"client_secret\": \"your_client_secret\", \"grant_type\": \"client_credentials\"}")
+                .post(GOVT_AUTH_URL);
+
+        return response.jsonPath().getString("access_token");
+    }
+
+	
 
 	public static Response makeApiRequest(String authType, String httpMethod, String endpoint, Object requestBody) {
 		// Get authentication provider dynamically
 		AuthProvider authProvider = AuthFactory.getAuthProvider(authType);
 		String authToken = authProvider.getAuthToken();
-
+		
+		
 		// Create the request specification
 		RequestSpecification requestSpec = RestAssured.given().header("Authorization", authToken).baseUri(BASE_URL)
 				.when();
@@ -37,12 +51,17 @@ public class ApiRequestHelper {
 		}
 	}
 
+
+	
 	public static Response makeThirdPartyApiRequest(String thirdPartyBaseUrl, String endpoint, String queryParams) {
+		   String authToken = getOAuthToken();
 		String fullUrl = thirdPartyBaseUrl + endpoint + "?" + queryParams;
 
 		try {
 
-			return RestAssured.given().baseUri(thirdPartyBaseUrl).when().get(fullUrl);
+			return RestAssured.given()
+					 .header("Authorization", "Bearer " + authToken)
+					 .baseUri(thirdPartyBaseUrl).when().get(fullUrl);
 
 		} catch (Exception e) {
 
@@ -50,5 +69,13 @@ public class ApiRequestHelper {
 			throw new RuntimeException("Error occurred while interacting with the third-party API.", e);
 		}
 	}
+	
+	public static Response verifyDigilockerUser(String userId) {
+        return RestAssured.given()
+                .header("Authorization", "Bearer your_static_token")
+                .queryParam("userId", userId)
+                .when()
+                .get(DIGILOCKER_URL);
+    }
 
 }

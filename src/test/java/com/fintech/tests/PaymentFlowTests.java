@@ -3,8 +3,8 @@ package com.fintech.tests;
 import com.fintech.config.ConfigManager;
 
 import com.fintech.endpoints.ApplicationEndpoints;
-import com.fintech.models.PaymentRequest;
-import com.fintech.models.PaymentResponse;
+import com.fintech.models.PaymentRequestMain;
+import com.fintech.models.PaymentResponseMain;
 
 import com.fintech.resources.Payload;
 import com.fintech.utils.ApiRequestHelper;
@@ -31,8 +31,8 @@ public class PaymentFlowTests {
 		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT,
 				Payload.makePayment());
 
-		// Deserialize the response into PaymentResponse
-		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+		// Deserialize the response into PaymentResponseMain
+		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
 
 		// Validate the response
 		ValidationUtils.validateStatusCode(response, 200);
@@ -41,12 +41,12 @@ public class PaymentFlowTests {
 
 	@Test
 	public void testPaymentFlowWithBearerToken() {
-		PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
-				PaymentRequest.class);
+		PaymentRequestMain paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
+				PaymentRequestMain.class);
 		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT,
 				paymentRequest);
 
-		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
 		ValidationUtils.validateStatusCode(response, 200);
 		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
 	}
@@ -59,8 +59,8 @@ public class PaymentFlowTests {
 
 		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, jsonData);
 
-		// Deserialize the response into PaymentResponse
-		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+		// Deserialize the response into PaymentResponseMain
+		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
 
 		// Validate the response
 		ValidationUtils.validateStatusCode(response, 200);
@@ -69,11 +69,11 @@ public class PaymentFlowTests {
 
 	@Test
 	public void testPaymentFlowWithOAuth() {
-		PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
-				PaymentRequest.class);
+		PaymentRequestMain paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
+				PaymentRequestMain.class);
 		Response response = ApiRequestHelper.makeApiRequest("oauth", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
-		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
 		ValidationUtils.validateStatusCode(response, 200);
 		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
 	}

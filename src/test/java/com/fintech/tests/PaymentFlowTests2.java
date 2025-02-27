@@ -1,6 +1,6 @@
 package com.fintech.tests;
 
-import com.fintech.endpoints.Endpoints;
+import com.fintech.endpoints.ApplicationEndpoints;
 import com.fintech.models.PaymentRequest;
 import com.fintech.models.PaymentResponse;
 import com.fintech.models.PaymentResponseMain;
@@ -28,7 +28,7 @@ public class PaymentFlowTests2 {
     @Test
     public void testPaymentFlowWithJsonBody() {
         PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json", PaymentRequest.class);
-        Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT, Payload.makePayment());
+        Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, Payload.makePayment());
 
         PaymentResponse paymentResponse = response.as(PaymentResponse.class);
         ValidationUtils.validateStatusCode(response, 200);
@@ -43,7 +43,7 @@ public class PaymentFlowTests2 {
         String filePath = "src/test/resources/testdata/payment_data.json";
         PaymentRequest paymentRequest = TestDataReader.readJsonData(filePath, PaymentRequest.class);
 
-        Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT, paymentRequest);
+        Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
         PaymentResponse paymentResponse = response.as(PaymentResponse.class);
         ValidationUtils.validateStatusCode(response, 200);
@@ -57,7 +57,7 @@ public class PaymentFlowTests2 {
     public void testPaymentFlowWithBearerTokenExcel(ITestResult result) {
         HashMap<String, Object> jsonData = ExcelToJSONBody.getInstance().paymentDataFromExcel(result.getMethod().getMethodName(), sheetName);
 
-        Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT, jsonData);
+        Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, jsonData);
 
         PaymentResponse paymentResponse = response.as(PaymentResponse.class);
         ValidationUtils.validateStatusCode(response, 200);
@@ -84,7 +84,7 @@ public class PaymentFlowTests2 {
         String accessToken = oAuthResponse.jsonPath().getString("access_token");
 
         // Now, perform the actual payment flow with the obtained OAuth token
-        Response response = ApiRequestHelper.makeApiRequest("oauth", "POST", Endpoints.CONFIRM_PAYMENT, paymentRequest);
+        Response response = ApiRequestHelper.makeApiRequest("oauth", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
         PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
         ValidationUtils.validateStatusCode(response, 200);

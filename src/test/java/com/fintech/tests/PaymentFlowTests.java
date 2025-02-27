@@ -2,7 +2,7 @@ package com.fintech.tests;
 
 import com.fintech.config.ConfigManager;
 
-import com.fintech.endpoints.Endpoints;
+import com.fintech.endpoints.ApplicationEndpoints;
 import com.fintech.models.PaymentRequest;
 import com.fintech.models.PaymentResponse;
 
@@ -28,7 +28,7 @@ public class PaymentFlowTests {
 	public void testPaymentFlowWithJsonBody() {
 		// Path to the JSON file
 		// Perform the API request
-		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT,
+		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT,
 				Payload.makePayment());
 
 		// Deserialize the response into PaymentResponse
@@ -43,7 +43,7 @@ public class PaymentFlowTests {
 	public void testPaymentFlowWithBearerToken() {
 		PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
 				PaymentRequest.class);
-		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT,
+		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT,
 				paymentRequest);
 
 		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
@@ -57,7 +57,7 @@ public class PaymentFlowTests {
 		HashMap<String, Object> jsonData = ExcelToJSONBody.getInstance()
 				.paymentDataFromExcel(result.getMethod().getMethodName(), sheetName);
 
-		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", Endpoints.CONFIRM_PAYMENT, jsonData);
+		Response response = ApiRequestHelper.makeApiRequest("bearer", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, jsonData);
 
 		// Deserialize the response into PaymentResponse
 		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
@@ -71,7 +71,7 @@ public class PaymentFlowTests {
 	public void testPaymentFlowWithOAuth() {
 		PaymentRequest paymentRequest = TestDataReader.readJsonData("src/test/resources/testdata/payment_data.json",
 				PaymentRequest.class);
-		Response response = ApiRequestHelper.makeApiRequest("oauth", "POST", Endpoints.CONFIRM_PAYMENT, paymentRequest);
+		Response response = ApiRequestHelper.makeApiRequest("oauth", "POST", ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
 		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
 		ValidationUtils.validateStatusCode(response, 200);

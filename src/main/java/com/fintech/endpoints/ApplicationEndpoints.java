@@ -1,6 +1,6 @@
 package com.fintech.endpoints;
 
-public class Endpoints {
+public class ApplicationEndpoints {
 	
 	// Payment Processing
 	public static final String CREATE_PAYMENT = "/payments";
@@ -10,6 +10,9 @@ public class Endpoints {
 	// Transaction History
 	public static final String GET_TRANSACTIONS = "/transactions";
 	public static final String GET_TRANSACTION_DETAILS = "/transactions/{transactionId}";
+	
+	
+	
 	
 	
 }

@@ -3,12 +3,12 @@ package com.fintech.tests;
 import com.fintech.config.ConfigManager;
 
 import com.fintech.endpoints.ApplicationEndpoints;
+import com.fintech.helper.ApiRequestHelper;
+import com.fintech.helper.ValidationUtils;
 import com.fintech.models.PaymentRequestMain;
 import com.fintech.models.PaymentResponseMain;
 
 import com.fintech.resources.Payload;
-import com.fintech.utils.ApiRequestHelper;
-import com.fintech.utils.ValidationUtils;
 import com.fintech.data.ExcelToJSONBody;
 import com.fintech.data.TestDataReader; 
 

@@ -1,4 +1,4 @@
-package com.fintech.utils;
+package com.fintech.helper;
 
 import java.io.IOException;
 
@@ -11,18 +11,9 @@ import io.restassured.specification.RequestSpecification;
 
 public class ApiRequestHelper {
 
-	private static final String BASE_URL = ConfigManager.getInstance().getBaseUrl();
-	private static final String GOVT_AUTH_URL = "https://sample-govt-api.com/oauth/token";
-	private static final String DIGILOCKER_URL = "https://digilocker.gov/api/checkUser";
 
-	public static String getOAuthToken() {
-        Response response = RestAssured.given()
-                .contentType("application/json")
-                .body("{\"client_id\": \"your_client_id\", \"client_secret\": \"your_client_secret\", \"grant_type\": \"client_credentials\"}")
-                .post(GOVT_AUTH_URL);
 
-        return response.jsonPath().getString("access_token");
-    }
+
 
 	
 
@@ -53,8 +44,8 @@ public class ApiRequestHelper {
 
 
 	
-	public static Response makeThirdPartyApiRequest(String thirdPartyBaseUrl, String endpoint, String queryParams) {
-		   String authToken = getOAuthToken();
+	public static Response makePreAuthKYCRequest(String authToken, String thirdPartyBaseUrl, String endpoint, String queryParams) {
+
 		String fullUrl = thirdPartyBaseUrl + endpoint + "?" + queryParams;
 
 		try {
@@ -70,12 +61,12 @@ public class ApiRequestHelper {
 		}
 	}
 	
-	public static Response verifyDigilockerUser(String userId) {
+	public static Response verifyDigilockerUser(String digiLockerURL, String digiLockerAuthToken, String userId) {
         return RestAssured.given()
-                .header("Authorization", "Bearer your_static_token")
+                .header("Authorization", digiLockerAuthToken)
                 .queryParam("userId", userId)
                 .when()
-                .get(DIGILOCKER_URL);
+                .get(digiLockerURL);
     }
 
 }

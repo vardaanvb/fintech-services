@@ -1,4 +1,4 @@
-package com.fintech.utils;
+package com.fintech.helper;
 
 import io.restassured.response.Response;
 import org.testng.Assert;

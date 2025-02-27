@@ -1,4 +1,4 @@
-package com.fintech.utils;
+package com.fintech.helper;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;

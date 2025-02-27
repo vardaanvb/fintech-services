@@ -3,19 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.fintech.tests.KycVerificationTest">
+      <class name="com.fintech.mock.WireMockTestNG">
         <methods>
-          <include name="testEndToEndKycCheck"/>
-          <include name="tearDownWireMockServer"/>
+          <include name="tearDown"/>
+          <include name="testWireMockStub"/>
           <include name="setUp"/>
-          <include name="setUpWireMockServer"/>
-          <include name="testInvalidAadhaarFormat"/>
-          <include name="testKycServiceFailure"/>
-          <include name="testPendingKycStatus"/>
-          <include name="testSuccessfulKycCheck"/>
-          <include name="testInvalidUserScenario"/>
         </methods>
-      </class> <!-- com.fintech.tests.KycVerificationTest -->
+      </class> <!-- com.fintech.mock.WireMockTestNG -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

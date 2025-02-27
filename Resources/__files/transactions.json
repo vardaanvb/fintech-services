@@ -1,0 +1,26 @@
+[
+  {
+    "transactionID": "TXN12345",
+    "amount": 250.75,
+    "currency": "USD",
+    "transactionType": "Credit",
+    "status": "Success",
+    "message": "Transaction Completed"
+  },
+  {
+    "transactionID": "TXN12346",
+    "amount": 500.5,
+    "currency": "EUR",
+    "transactionType": "Debit",
+    "status": "Failed",
+    "message": "Insufficient Balance"
+  },
+  {
+    "transactionID": "TXN12347",
+    "amount": 1000.0,
+    "currency": "INR",
+    "transactionType": "Credit",
+    "status": "Pending",
+    "message": "Awaiting Bank Approval"
+  }
+]

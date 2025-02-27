@@ -1,0 +1,22 @@
+{
+  "transactions": [
+    {
+      "transactionID": "TXN12345",
+      "amount": 250.75,
+      "currency": "USD",
+      "transactionType": "Credit"
+    },
+    {
+      "transactionID": "TXN12346",
+      "amount": 500.5,
+      "currency": "EUR",
+      "transactionType": "Debit"
+    },
+    {
+      "transactionID": "TXN12347",
+      "amount": 1000.0,
+      "currency": "INR",
+      "transactionType": "Credit"
+    }
+  ]
+}

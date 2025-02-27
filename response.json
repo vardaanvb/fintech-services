@@ -1,0 +1,31 @@
+{
+  "paymentID": "PAY12345",
+  "amount": 100.00,
+  "currency": "USD",
+  "paymentMethod": "Credit Card",
+  "status": "Success",
+  "message": "Payment completed successfully",
+  "details": {
+    "timestamps": [
+      {
+        "event": "Initiated",
+        "timestamp": "2023-10-05T09:15:00Z"
+      },
+      {
+        "event": "Processed",
+        "timestamp": "2023-10-05T09:16:30Z"
+      },
+      {
+        "event": "Completed",
+        "timestamp": "2023-10-05T09:18:45Z"
+      }
+    ],
+    "feeBreakdown": [
+      {
+        "type": "Processing Fee",
+        "amount": 3.50,
+        "description": "Payment gateway charges"
+      }
+    ]
+  }
+}

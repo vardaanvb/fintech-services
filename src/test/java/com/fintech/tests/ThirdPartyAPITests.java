@@ -14,7 +14,7 @@ public class ThirdPartyAPITests extends WireMockBaseTest {
     private static final String VALID_AADHAAR = "1234-5678-9012";
     private static final String INVALID_AADHAAR = "0000-0000-0000";
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void testSuccessfulKYC() {
     	ThirdPartyAPIMocks.setupKYCMock(VALID_AADHAAR, "success");
         

@@ -15,11 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 
-	// Identify Testcases coloum by scanning the entire 1st row
-	// once coloumn is identified then scan entire testcase coloum to identify
-	// purcjhase testcase row
-	// after you grab purchase testcase row = pull all the data of that row and feed
-	// into test
+
 
 	public ArrayList<String> getData(String testcaseName, String sheetName) {
 		// fileInputStream argument
@@ -28,7 +24,8 @@ public class ExcelReader {
 		FileInputStream fis;
 		XSSFWorkbook workbook = null;
 		try {
-			fis = new FileInputStream("C://Users//rahul//Documents//demodata.xlsx");
+			//C:\Users\vb\Desktop\POC\E2E_Web\FintechServices\src\test\java\com\fintech\resources\TestData.xlsx
+			fis = new FileInputStream("./Resources/TestData.xlsx");
 
 			workbook = new XSSFWorkbook(fis);
 		} catch (FileNotFoundException e) {
@@ -61,18 +58,16 @@ public class ExcelReader {
 
 					k++;
 				}
-				System.out.println(coloumn);
+			//	System.out.println(coloumn);
 
-				//// once coloumn is identified then scan entire testcase coloum to identify
-				//// purcjhase testcase row
+		
 				while (rows.hasNext()) {
 
 					Row r = rows.next();
 
 					if (r.getCell(coloumn).getStringCellValue().equalsIgnoreCase(testcaseName)) {
 
-						//// after you grab purchase testcase row = pull all the data of that row and
-						//// feed into test
+					
 
 						Iterator<Cell> cv = r.cellIterator();
 						while (cv.hasNext()) {
@@ -94,6 +89,14 @@ public class ExcelReader {
 		}
 		return a;
 
+	}
+	
+	public static void main(String[] args) {
+		ExcelReader ex = new ExcelReader();
+		ArrayList data = ex.getData("Payment", "Sheet1");
+		System.out.println(data.get(1));
+		System.out.println(data.get(2));
+		
 	}
 
 }

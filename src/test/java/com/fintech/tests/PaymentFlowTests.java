@@ -7,16 +7,25 @@ import com.fintech.models.PaymentResponse;
 import com.fintech.models.PaymentResponseMain;
 import com.fintech.models.PaymentResponseTimeStamp;
 import com.fintech.utils.ValidationUtils;
+import com.fintech.data.HashMapToJSON;
 import com.fintech.data.TestDataReader; // Import TestDataReader from test folder
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.List;
 
+import org.testng.ITestResult;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class PaymentFlowTests {
+
+
+	
+	private static final String sheetName = ConfigManager.getInstance().getProperty("paymentSheetName");
+	
 
 	@Test
 	public void testPaymentFlowWithBearerToken() {
@@ -30,6 +39,24 @@ public class PaymentFlowTests {
 		RestAssured.baseURI = ConfigManager.getInstance().getBaseUrl();
 		Response response = RestAssured.given()
 				.header("Authorization", ConfigManager.getInstance().getProperty("authToken")).body(paymentRequest)
+				.post(ConfigManager.getInstance().getProperty("baseURL") + Endpoints.CONFIRM_PAYMENT);
+
+		// Deserialize the response into PaymentResponse
+		PaymentResponse paymentResponse = response.as(PaymentResponse.class);
+
+		// Validate the response
+		ValidationUtils.validateStatusCode(response, 200);
+		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
+	}
+
+	@Test
+	public void testPaymentFlowWithBearerTokenExcel(ITestResult result) {
+
+		HashMap<String, Object> jsonData = HashMapToJSON.getInstance().paymentDataFromExcel(result.getMethod().getMethodName(), sheetName);
+
+		RestAssured.baseURI = ConfigManager.getInstance().getBaseUrl();
+		Response response = RestAssured.given()
+				.header("Authorization", ConfigManager.getInstance().getProperty("authToken")).body(jsonData)
 				.post(ConfigManager.getInstance().getProperty("baseURL") + Endpoints.CONFIRM_PAYMENT);
 
 		// Deserialize the response into PaymentResponse
@@ -78,13 +105,12 @@ public class PaymentFlowTests {
 		List<PaymentResponseTimeStamp> event = paymentResponse.getDetails().getTimestamps();
 		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(0).getEvent(),
 				"Initiated");
-		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(1).getEvent(),
-				"Pending");
+		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(1).getEvent(), "Pending");
 		ValidationUtils.validateResponseBody(paymentResponse.getDetails().getTimestamps().get(2).getEvent(),
 				"Completed");
-		
+
 		for (int i = 0; i < event.size(); i++) {
-		// iterate over the list to validate data. 
+			// iterate over the list to validate data.
 		}
 	}
 }

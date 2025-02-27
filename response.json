@@ -19,13 +19,6 @@
         "event": "Completed",
         "timestamp": "2023-10-05T09:18:45Z"
       }
-    ],
-    "feeBreakdown": [
-      {
-        "type": "Processing Fee",
-        "amount": 3.50,
-        "description": "Payment gateway charges"
-      }
     ]
   }
 }

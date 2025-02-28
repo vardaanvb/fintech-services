@@ -1,10 +1,12 @@
 package com.fintech.helper;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.fintech.auth.AuthFactory;
 import com.fintech.auth.AuthProvider;
-import com.fintech.config.ConfigManager;
+import com.fintech.utils.ConfigManager;
+
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -19,6 +21,7 @@ public class ApiRequestHelper {
 
 	public static Response makeApiRequest(String baseURL, String authType, String httpMethod, String endpoint, Object requestBody) {
 		// Get authentication provider dynamically
+		
 		AuthProvider authProvider = AuthFactory.getAuthProvider(authType);
 		String authToken = authProvider.getAuthToken();
 		
@@ -44,15 +47,15 @@ public class ApiRequestHelper {
 
 
 	
-	public static Response makeKYCRequest(String authToken, String thirdPartyBaseUrl, String endpoint, String queryParams) {
+	public static Response makeGetRequestWithAuthTokenPresent(String authToken, HashMap<String, String> params, String baseURL, String endpoint) {
 
-		String fullUrl = thirdPartyBaseUrl + endpoint + "?" + queryParams;
+		String fullUrl = baseURL + endpoint + "?";
 
 		try {
 
-			return RestAssured.given()
+			return RestAssured.given().queryParams(params)
 					 .header("Authorization", "Bearer " + authToken)
-					 .baseUri(thirdPartyBaseUrl).when().get(fullUrl);
+					 .baseUri(baseURL).when().get(fullUrl);
 
 		} catch (Exception e) {
 

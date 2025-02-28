@@ -3,6 +3,8 @@ package com.fintech.common;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
+import com.fintech.auth.OAuthAuthProvider;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
@@ -31,6 +33,8 @@ public class BaseTestHelper {
 	}
 
 	protected static String getInternalPreOAuthToken(String govtAuthURL) {
+		
+		OAuthAuthProvider auth = new OAuthAuthProvider();
 		Response response = RestAssured.given().contentType("application/json").body(
 				"{\"client_id\": \"intclientId\", \"client_secret\": \"intclient_secret\", \"grant_type\": \"intgrant_type\", \"scope\": \"trust\"}")
 				.post(govtAuthURL);

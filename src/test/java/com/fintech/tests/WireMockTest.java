@@ -6,10 +6,10 @@ import org.testng.annotations.Test;
 
 import com.fintech.common.BaseTest;
 
-public class WireMockTest2 extends BaseTest {
+public class WireMockTest extends BaseTest {
 
     @Test
-    public void testWireMockStub() {
+    public void VerifyTransactionsService() {
         RestAssured.baseURI = "http://localhost:" + WIREMOCK_PORT;
 
         try {

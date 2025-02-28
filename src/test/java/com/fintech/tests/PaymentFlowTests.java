@@ -1,15 +1,15 @@
 package com.fintech.tests;
 
 import com.fintech.common.BaseTest;
-import com.fintech.config.ConfigManager;
+import com.fintech.config.ApplicationEndpoints;
 import com.fintech.config.Filepaths;
-import com.fintech.endpoints.ApplicationEndpoints;
 import com.fintech.helper.ApiRequestHelper;
 import com.fintech.helper.ValidationUtils;
 import com.fintech.models.PaymentRequestMain;
 import com.fintech.models.PaymentResponseMain;
 import com.fintech.models.PaymentResponseTimeStamp;
 import com.fintech.payload.Payload;
+import com.fintech.utils.ConfigManager;
 import com.fintech.utils.ExcelToJSONBody;
 import com.fintech.utils.JsonFileParser;
 
@@ -25,12 +25,12 @@ import org.testng.annotations.Test;
 public class PaymentFlowTests extends BaseTest {
 
 	String sheetName;
-	String fundsFilePath = "./Resources/TestData.xlsx";
+	
 
 	@Test
 	public void testPaymentFlowWithJsonBody() {
 
-		Response response = ApiRequestHelper.makeApiRequest(BASE_URL, "bearer", "POST",
+		Response response = ApiRequestHelper.makeApiRequest(INT_BASE_URL, "bearer", "POST",
 				ApplicationEndpoints.CONFIRM_PAYMENT, Payload.makePayment());
 
 		// Deserialize the response into PaymentResponseMain
@@ -45,7 +45,7 @@ public class PaymentFlowTests extends BaseTest {
 	public void testPaymentFlowWithPOJOBearerToken() {
 		PaymentRequestMain paymentRequest = JsonFileParser.readJsonData(Filepaths.PAYMENT_REQUEST_JSON,
 				PaymentRequestMain.class);
-		Response response = ApiRequestHelper.makeApiRequest(BASE_URL, "bearer", "POST",
+		Response response = ApiRequestHelper.makeApiRequest(INT_BASE_URL, "bearer", "POST",
 				ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
 
 		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);

@@ -4,7 +4,7 @@ package com.fintech.helper;
 
 import org.testng.Assert;
 
-import com.fintech.endpoints.ApplicationEndpoints;
+import com.fintech.config.ApplicationEndpoints;
 import com.fintech.models.PaymentRequestMain;
 import com.fintech.models.PaymentResponseMain;
 import com.fintech.utils.JsonFileParser;
@@ -33,6 +33,8 @@ public class ThirdPartyHelper {
 
 		}
 	}
+	
+	
 
 	public static void verifyDigiLockerRegistrationResponse(Response response) {
 

@@ -10,21 +10,21 @@ import java.nio.file.Paths;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import com.fintech.config.ConfigManager;
-import com.fintech.tests.WireMockTest2;
+
+import com.fintech.utils.ConfigManager;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 public class BaseTest {
 
-	protected static final String BASE_URL = ConfigManager.getInstance().getBaseUrl();
-
+	protected static final String INT_BASE_URL = ConfigManager.getInstance().getBaseUrl();
 	protected static final String DIGILOCKER_URL = ConfigManager.getInstance().getProperty("digiLockerBaseURL");
 
-	private static final String GOVT_PRE_AUTH_URL = ConfigManager.getInstance().getProperty("govtAuthURL");
-	private static final String INT_PRE_AUTH_URL = ConfigManager.getInstance().getProperty("intAuthURL");
-
-	public String govtPreAuthToken;
-	public String intPreAuthToken;
+	protected static final String GOVT_PRE_AUTH_URL = ConfigManager.getInstance().getProperty("govtAuthURL");
+	protected static final String INT_PRE_AUTH_URL = ConfigManager.getInstance().getProperty("intAuthURL");
+	
+	protected static final String DIGILOCKER_AUTH_TOKEN = ConfigManager.getInstance().getProperty("digiLockerAuthToken");
+	
+	
 	protected WireMockServer wireMockServer;
 	protected static final int WIREMOCK_PORT = 8081;
 	BaseTestHelper bth = new BaseTestHelper();
@@ -40,8 +40,6 @@ public class BaseTest {
 			System.err.println("Error starting WireMock server: " + e.getMessage());
 			throw new RuntimeException("Failed to start WireMock server", e);
 		}
-	//	govtPreAuthToken = BaseTestHelper.getGovtPreOAuthToken(GOVT_PRE_AUTH_URL);
-	//	intPreAuthToken = BaseTestHelper.getInternalPreOAuthToken(INT_PRE_AUTH_URL);
 	}
 
 	@AfterMethod

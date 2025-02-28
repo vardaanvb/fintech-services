@@ -12,7 +12,7 @@ public class ExcelDataReader {
 
    
 
-    public String getData(String filePath, String rowName, String columnName, String sheetName) {
+    public String getDataWithTestAndColumnName(String filePath, String rowName, String columnName, String sheetName) {
         FileInputStream fis = null;
         XSSFWorkbook workbook = null;
         String cellValue = null;
@@ -94,6 +94,40 @@ public class ExcelDataReader {
 
         return cellValue;
     }
+    
+    
+
+
+
+
+    
+        public Object[][] getData(String filePath, String sheetName) throws IOException {
+        	
+
+            FileInputStream fis = new FileInputStream(filePath);
+            Workbook workbook = new XSSFWorkbook(fis);
+            Sheet sheet = workbook.getSheet(sheetName);
+            
+            if (sheet == null) {
+                throw new IllegalArgumentException("Sheet " + sheetName + " not found in " + filePath);
+            }
+
+            int rowCount = sheet.getPhysicalNumberOfRows();
+            Object[][] data = new Object[rowCount - 1][1]; // Exclude header row
+
+            for (int i = 1; i < rowCount; i++) { // Start from row 1 to skip header
+                Row row = sheet.getRow(i);
+                if (row != null && row.getCell(0) != null) {
+                    data[i - 1][0] = row.getCell(0).toString(); // Read UserID as String
+                }
+            }
+
+            workbook.close();
+            return data;
+        
+        }
+    
+
 
     public static void main(String[] args) {
     // To Test Run

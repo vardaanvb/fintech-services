@@ -1,4 +1,4 @@
-package com.fintech.endpoints;
+package com.fintech.config;
 
 public class ApplicationEndpoints {
 	

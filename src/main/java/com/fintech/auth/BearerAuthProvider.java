@@ -1,6 +1,6 @@
 package com.fintech.auth;
 
-import com.fintech.config.ConfigManager;
+import com.fintech.utils.ConfigManager;
 
 public class BearerAuthProvider implements AuthProvider {
 

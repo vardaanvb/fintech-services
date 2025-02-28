@@ -1,6 +1,6 @@
 package com.fintech.utils;
 
-public class JSONToExcelMapper {
+public class ExcelColumnsJSONKeyMapper {
 
     // Enum for column mappings
     public enum FundsTransfer {

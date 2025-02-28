@@ -32,10 +32,10 @@ public class FundsTransferTest extends BaseTest {
 	@Test
 	public void FundsTransferFlowWithExcelAndOAuth(ITestResult result) {
 		
-
+		ExcelToJSONBody ex = new ExcelToJSONBody();
 		
 		
-		HashMap<String, Object> jsonData = ExcelToJSONBody.getInstance()
+		HashMap<String, Object> jsonData = ex
 				.fundsTransferDataFromExcel(Filepaths.REQUEST_EXCEL, result.getMethod().getMethodName(), sheetName);
 		
 		Response response = ApiRequestHelper.makeApiRequest(INT_BASE_URL, "oauth", "POST",

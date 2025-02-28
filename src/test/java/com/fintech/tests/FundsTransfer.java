@@ -22,35 +22,37 @@ import org.testng.ITestResult;
 
 import org.testng.annotations.Test;
 
-public class PaymentFlowTests extends BaseTest {
+public class FundsTransfer extends BaseTest {
 
-	String sheetName;
+	String sheetName = ConfigManager.getInstance().getProperty("fundsTransferSheetName");
 	String fundsFilePath = "./Resources/TestData.xlsx";
 
-	@Test
-	public void testPaymentFlowWithJsonBody() {
-
-		Response response = ApiRequestHelper.makeApiRequest(BASE_URL, "bearer", "POST",
-				ApplicationEndpoints.CONFIRM_PAYMENT, Payload.makePayment());
-
-		// Deserialize the response into PaymentResponseMain
-		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
-
-		// Validate the response
-		ValidationUtils.validateStatusCode(response, 200);
-		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
-	}
+	
 
 	@Test
-	public void testPaymentFlowWithPOJOBearerToken() {
-		PaymentRequestMain paymentRequest = JsonFileParser.readJsonData(Filepaths.PAYMENT_REQUEST_JSON,
-				PaymentRequestMain.class);
-		Response response = ApiRequestHelper.makeApiRequest(BASE_URL, "bearer", "POST",
-				ApplicationEndpoints.CONFIRM_PAYMENT, paymentRequest);
+	public void FundsTransferFlowWithExcelAndOAuth(ITestResult result) {
+		
+		
+		HashMap<String, Object> jsonData = ExcelToJSONBody.getInstance()
+				.fundsTransferDataFromExcel(fundsFilePath, result.getMethod().getMethodName(), sheetName);
+		Response response = ApiRequestHelper.makeApiRequest(BASE_URL, "oauth", "POST",
+				ApplicationEndpoints.CREATE_FUNDS_TRANSFER, jsonData);
 
 		PaymentResponseMain paymentResponse = response.as(PaymentResponseMain.class);
 		ValidationUtils.validateStatusCode(response, 200);
 		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
-	}
 
+		ValidationUtils.validateStatusCode(response, 200);
+		ValidationUtils.validateResponseBody(paymentResponse.getStatus(), "Success");
+		ValidationUtils.validateResponseBody(paymentResponse.getMessage(), "Payment completed successfully");
+
+		List<PaymentResponseTimeStamp> eventList = paymentResponse.getDetails().getTimestamps();
+		ValidationUtils.validateResponseBody(eventList.get(0).getEvent(), "Initiated");
+		ValidationUtils.validateResponseBody(eventList.get(1).getEvent(), "Pending");
+		ValidationUtils.validateResponseBody(eventList.get(2).getEvent(), "Completed");
+
+		for (int i = 0; i < eventList.size(); i++) {
+			// iterate over the list to validate data.
+		}
+	}
 }

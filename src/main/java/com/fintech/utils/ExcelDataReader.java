@@ -10,16 +10,16 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 
 public class ExcelDataReader {
 
-    private static final String FILE_PATH = "./Resources/TestData.xlsx";
+   
 
-    public String getData(String rowName, String columnName, String sheetName) {
+    public String getData(String filePath, String rowName, String columnName, String sheetName) {
         FileInputStream fis = null;
         XSSFWorkbook workbook = null;
         String cellValue = null;
 
         try {
             // Load the Excel file
-            fis = new FileInputStream(FILE_PATH);
+            fis = new FileInputStream(filePath);
             workbook = new XSSFWorkbook(fis);
 
             XSSFSheet sheet = workbook.getSheet(sheetName);
@@ -78,7 +78,7 @@ public class ExcelDataReader {
             }
 
         } catch (FileNotFoundException e) {
-            System.err.println("Error: Excel file not found at '" + FILE_PATH + "'.");
+            System.err.println("Error: Excel file not found at '" + filePath + "'.");
             e.printStackTrace();
         } catch (IOException e) {
             System.err.println("Error: Unable to read the Excel file.");
@@ -96,8 +96,6 @@ public class ExcelDataReader {
     }
 
     public static void main(String[] args) {
-        ExcelDataReader ex = new ExcelDataReader();
-        String data = ex.getData("Payment", "Amount", "Sheet1"); // Example usage
-        System.out.println("Retrieved Value: " + data);
+    // To Test Run
     }
 }
